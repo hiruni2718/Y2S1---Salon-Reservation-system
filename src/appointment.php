@@ -1,33 +1,71 @@
+<?php
+include 'db.php';
+
+try {
+    if (isset($_POST['submit'])) {
+        $name = test_input($_POST['name']);
+        $phone = test_input($_POST['phone']);
+        $date = test_input($_POST['date']);
+        $time = test_input($_POST['time']);
+        $email = test_input($_POST['email']);
+
+        $query = mysqli_query($conn, "insert into  tblappointment(Name, Email, PhoneNumber,AptDate,AptTime) value('$name','$email','$phone','$date','$time)");
+        if ($query) {
+            echo "<script>alert('Service has been added.');</script>";
+            echo "<script>window.location.href = 'appointment.php'</script>";
+            $msg = "";
+        } else {
+            echo "<script>alert('Something Went Wrong. Please try again.');</script>";
+        }
+    }
+} catch (\Throwable $th) {
+    echo "<script>alert('Something Went Wrong. Please try again.');</script>";
+}
+
+
+
+
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Basic -->
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<!-- Mobile Metas -->
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<!-- Site Metas -->
-<title>SMBarber - Responsive HTML5 Template</title>
-<meta name="keywords" content="">
-<meta name="description" content="">
-<meta name="author" content="">
+    <!-- Site Metas -->
+    <title>SMBarber - Responsive HTML5 Template</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-<!-- Site Icons -->
-<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-<!-- Bootstrap CSS -->
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<!-- Site CSS -->
-<link rel="stylesheet" href="style.css">
-<!-- Colors CSS -->
-<link rel="stylesheet" href="css/colors.css">
-<!-- ALL VERSION CSS -->
-<link rel="stylesheet" href="css/versions.css">
-<!-- Responsive CSS -->
-<link rel="stylesheet" href="css/responsive.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Site CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Colors CSS -->
+    <link rel="stylesheet" href="css/colors.css">
+    <!-- ALL VERSION CSS -->
+    <link rel="stylesheet" href="css/versions.css">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="css/responsive.css">
 
 </head>
 
@@ -59,7 +97,7 @@
                     <li><a href="index.html">Home</a></li>
                     <li><a href="services.html">Our Services</a></li>
                     <li><a href="barbers.html">Our Barbers</a></li>
-                    <li><a class="active" href="appointment.html">Appointment</a></li>
+                    <li><a class="active" href="appointment.php">Appointment</a></li>
                     <li><a href="about.html">About Us</a></li>
                     <li><a href="/admin">Admin</a></li>
                 </ul>
@@ -113,35 +151,27 @@
                         <div class="col-md-6">
                             <div class="contact_form">
                                 <div id="message"></div>
-                                <form id="contactform" class="row" action="contact.php" name="contactform"
-                                    method="post">
+                                <form class="row" role="form" method="post">
                                     <fieldset class="row-fluid">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <input type="text" name="first_name" id="first_name" class="form-control"
-                                                placeholder="First Name">
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <input type="text" name="last_name" id="last_name" class="form-control"
-                                                placeholder="Last Name">
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <input type="email" name="email" id="email" class="form-control"
-                                                placeholder="Your Email">
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <input type="text" name="phone" id="phone" class="form-control"
-                                                placeholder="Your Phone">
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <input type="time" name="time" id="time" class="form-control">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <input type="text" name="name" id="name" class="form-control" placeholder="Name" required>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <textarea class="form-control" name="comments" id="comments" rows="6"
-                                                placeholder="Give us more details.."></textarea>
+                                            <input type="email" name="email" id="email" class="form-control" placeholder="Your Email" required>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <input type="number" name="phone" id="phone" class="form-control" placeholder="Your Phone" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <small>Date:</small>
+                                            <input type="date" name="date" id="date" class="form-control" required>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <small>Time:</small>
+                                            <input type="time" name="time" id="time" class="form-control" required>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                                            <button type="submit" value="SEND" id="submit"
-                                                class="btn btn-light btn-radius btn-brd grd1 btn-block subt">Get
+                                            <button type="submit" name="submit" class="btn btn-light btn-radius btn-brd grd1 btn-block subt">Get
                                                 Appointment</button>
                                         </div>
                                     </fieldset>
@@ -164,9 +194,9 @@
 
     <!-- Menu Toggle Script -->
     <script>
-        (function ($) {
+        (function($) {
             "use strict";
-            $("#menu-toggle").click(function (e) {
+            $("#menu-toggle").click(function(e) {
                 e.preventDefault();
                 $("#wrapper").toggleClass("toggled");
             });
@@ -176,7 +206,7 @@
                 speed: 500, // Integer. How fast to complete the scroll in milliseconds
                 easing: 'easeInOutCubic', // Easing pattern to use
                 offset: 0, // Integer. How far to offset the scrolling anchor location in pixels
-                callback: function (anchor, toggle) { } // Function to run after scrolling
+                callback: function(anchor, toggle) {} // Function to run after scrolling
             });
         })(jQuery);
     </script>
